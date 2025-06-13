@@ -11,7 +11,11 @@ pipeline {
                 git branch: 'main', url: "${REPO_URL}"
             }
         }
-
+        stage('Debug Workspace') {
+            steps {
+                sh 'ls -R'
+            }
+        }
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig-jenkins', variable: 'KUBECONFIG')]) {
