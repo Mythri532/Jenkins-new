@@ -8,13 +8,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git url: "${REPO_URL}"
-            }
-        }
-
-        stage('Debug Workspace') {
-            steps {
-                sh 'ls -R'
+                git branch: 'main', url: "${REPO_URL}"
             }
         }
 
@@ -22,8 +16,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig-jenkins', variable: 'KUBECONFIG')]) {
                     sh '''
-                        kubectl apply -f my-first-pipeline/deployment.yaml
-                        kubectl apply -f my-first-pipeline/service.yaml
+                       kubectl apply -f my-first-pipeline/deployment.yaml
+                       kubectl apply -f my-first-pipeline/service.yaml
                     '''
                 }
             }
