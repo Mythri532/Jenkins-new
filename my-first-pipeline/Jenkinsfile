@@ -1,13 +1,26 @@
-
 pipeline {
-  agent {
-    docker { image 'httpd' }
-  }
-  stages {
-    stage('Test httpd') {
-      steps {
-        sh 'httpd -v' // Example command to verify httpd runs
-      }
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/Mythri532/Jenkins-new.git'
     }
-  }
+
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git url: "${REPO_URL}"
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig-jenkins', variable: 'KUBECONFIG')]) {
+                    sh '''
+                        kubectl apply -f deployment.yaml
+                        kubectl apply -f service.yaml
+                    '''
+                }
+            }
+        }
+    }
 }
