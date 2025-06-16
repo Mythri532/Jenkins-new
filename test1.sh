@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "hello sonu"
+echo "hello mythri"
